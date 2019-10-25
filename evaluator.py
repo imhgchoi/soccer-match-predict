@@ -11,7 +11,13 @@ class Evaluator():
         self.profitability()
 
     def accuracy(self):
-        pass
+        prediction = self.model.predict()
+
 
     def profitability(self):
-        pass
+        prediction = self.model.predict()
+
+
+        '''
+        back testing algo
+        '''
