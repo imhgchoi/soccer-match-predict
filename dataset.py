@@ -11,8 +11,8 @@ class Dataset():
     def load(self):
         data = pd.read_csv(self.config.datadir+'epl.csv')
 
-        # modify date format
-        data['Date'] = data['Date'].apply(lambda x : datetime.datetime.strptime(x, '%d/%m/%y').strftime('%Y-%m-%d'))
+        # preprocess data
+        data = self.preprocess(data)
 
         # split data
         train, test = self.split(data)
@@ -20,9 +20,11 @@ class Dataset():
         self.test_set = test
 
 
-    def preprocess(self):
-        pass
+    def preprocess(self, data):
+        # modify date format
+        data['Date'] = data['Date'].apply(lambda x : datetime.datetime.strptime(x, '%d/%m/%y').strftime('%Y-%m-%d'))
 
+        return data
 
     def split(self, data):
         train = data[pd.to_datetime(data['Date']).dt.year.apply(lambda x : x not in self.config.test_years)]
