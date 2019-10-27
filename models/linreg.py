@@ -16,12 +16,16 @@ class LinReg(BaseModel):
 
         return weight
 
+    def preprocess(self):
+        self.dataset.train_set = 0
+        self.dataset.test_set = 0
 
     def train(self):
         '''
         Just a raw example ; this code will not properly work yet
         '''
-
+        print(self.dataset.train_set)
+        
         def cost():
             return 1 / (2 * len(self.dataset.train_set)) * \
                    np.sum(np.power((np.matmul(self.dataset.train_set, self.w) - self.dataset.train_set.iloc[:,1]), 2))
@@ -45,7 +49,7 @@ class LinReg(BaseModel):
                 break
 
 
-    def predict(self, data):
+    def predict(self,):
         '''
         Refers to parameters and produce predictions
         :return: predicted value for input data

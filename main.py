@@ -1,5 +1,6 @@
 from config import get_args
 from dataset import Dataset
+from trainer import Trainer
 from evaluator import Evaluator
 from models.linreg import LinReg
 
@@ -17,9 +18,11 @@ def main():
     model = get_model(config, dataset)
 
     # Training Step
-    model.train()
+    trainer = Trainer(config, model)
+    trained_model = trainer.train()
 
-    evaluator = Evaluator(config, dataset, model)
+    # Evaluation Step
+    evaluator = Evaluator(config, trained_model)
     evaluator.evaluate()
 
 

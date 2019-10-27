@@ -11,6 +11,8 @@ def get_args():
 
     # Data
     argp.add_argument('--test_years', nargs='+', type=int, default=[2018])
+    argp.add_argument('--lookback_opp_matches', type=int, default=3)   # how many matches between away and home to refer to
+    argp.add_argument('--lookback_matches', type=int, default=5)   # how many previous matches of a team to refer to
 
     # Model General
     argp.add_argument('--model_type', type=str, default='linreg', choices=['linreg'])
