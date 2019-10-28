@@ -10,23 +10,34 @@ class Evaluator():
         self.model = model
 
     def evaluate(self):
-        self.accuracy()
+        print("\n------------EVALUATION------------")
+        self.metrics()
         self.profitability()
 
-    def accuracy(self):
+    def metrics(self):
         train_out, test_out = self.model.predict()
 
-        train_error = (train_out - self.trainY)**2
-        train_MSE = 1/(2*train_out.shape[0]) * np.sum(train_error, axis=0)
+        if 'mse' in self.config.eval_metrics :
+            train_error = (train_out - self.trainY)**2
+            train_MSE = 1/train_out.shape[0] * np.sum(train_error, axis=0)
 
-        test_error = (test_out - self.testY)**2
-        test_MSE = 1/(2*test_out.shape[0]) * np.sum(test_error, axis=0)
+            test_error = (test_out - self.testY)**2
+            test_MSE = 1/test_out.shape[0] * np.sum(test_error, axis=0)
 
-        print(train_MSE)
-        print(test_MSE)
+            print('train set : HOME MSE - {}  /  AWAY MSE - {}'.format(train_MSE[0], train_MSE[1]))
+            print('test set : HOME MSE - {}  /  AWAY MSE - {}'.format(test_MSE[0], test_MSE[1]))
+            print('\n')
+
+        if 'mae' in self.config.eval_metrics :
+            train_MAE = 1/train_out.shape[0] * np.sum(np.abs(train_out - self.trainY), axis=0)
+            test_MAE = 1/test_out.shape[0] * np.sum(np.abs(test_out - self.testY), axis=0)
+
+            print('train set : HOME MAE - {}  /  AWAY MAE - {}'.format(train_MAE[0], train_MAE[1]))
+            print('test set : HOME MAE - {}  /  AWAY MAE - {}'.format(test_MAE[0], test_MAE[1]))
+            print('\n')
 
     def profitability(self):
-        prediction = self.model.predict()
+        train_out, test_out = self.model.predict()
 
 
         '''

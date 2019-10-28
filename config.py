@@ -23,6 +23,9 @@ def get_args():
     argp.add_argument('--alpha', type=float, default=0.01)
     argp.add_argument('--tolerance', type=float, default=1e-7)
 
+    # evaluation
+    argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])
+
 
 
     return argp.parse_args()
