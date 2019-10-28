@@ -10,6 +10,7 @@ def get_args():
     argp.add_argument('--datadir', type=str, default="./data/")
 
     # Data
+    argp.add_argument('--use_prepro_v1', action='store_true', default=False)
     argp.add_argument('--test_years', nargs='+', type=int, default=[2018])
     argp.add_argument('--lookback_opp_matches', type=int, default=3)   # how many matches between away and home to refer to
     argp.add_argument('--lookback_matches', type=int, default=5)   # how many previous matches of a team to refer to
