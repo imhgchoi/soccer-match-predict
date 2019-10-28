@@ -15,8 +15,10 @@ class BaseModel():
         '''
         Should alter the dataset.train_set and dataset.test_set to the final data format used for training
 
-        self.dataset.train_set = ?
-        self.dataset.test_set = ?
+        self.dataset.trainX = ?
+        self.dataset.trainY = ?
+        self.dataset.testX = ?
+        self.dataset.testY = ?
         '''
         print('preprocessing logic is not implemented')
         raise NotImplementedError

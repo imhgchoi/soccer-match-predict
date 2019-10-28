@@ -21,6 +21,7 @@ def get_args():
     # linear regression
     argp.add_argument('--w_init', type=str, default='uniform', choices=['uniform','xavier'])
     argp.add_argument('--alpha', type=float, default=0.01)
+    argp.add_argument('--tolerance', type=float, default=1e-7)
 
 
 
