@@ -17,8 +17,14 @@ class LinReg(BaseModel):
         return weight
 
     def preprocess(self):
-        self.dataset.train_set = 0
-        self.dataset.test_set = 0
+        use_cols = ['Date','FTHG','FTAG','home_wins', 'home_draws', 'home_losses', 'home_goals', 'home_oppos_goals',
+                    'home_shots', 'home_oppos_shots', 'home_shotontarget', 'home_oppos_shotontarget',
+                    'away_wins', 'away_draws', 'away_losses', 'away_goals', 'away_oppos_goals',
+                    'away_shots', 'away_oppos_shots', 'away_shotontarget', 'away_oppos_shotontarget','Hodds','Dodds','Aodds']
+
+        train = self.dataset.train_set[use_cols]
+        test = self.dataset.test_set[use_cols]
+        exit()
 
     def train(self):
         '''
