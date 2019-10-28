@@ -19,9 +19,9 @@ def get_args():
     argp.add_argument('--model_type', type=str, default='linreg', choices=['linreg'])
 
     # linear regression
-    argp.add_argument('--w_init', type=str, default='uniform', choices=['uniform','xavier'])
-    argp.add_argument('--alpha', type=float, default=0.01)
-    argp.add_argument('--tolerance', type=float, default=1e-7)
+    argp.add_argument('--linreg_w_init', type=str, default='uniform', choices=['uniform','xavier'])
+    argp.add_argument('--linreg_alpha', type=float, default=0.01)
+    argp.add_argument('--linreg_tolerance', type=float, default=1e-7)
 
     # evaluation
     argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])

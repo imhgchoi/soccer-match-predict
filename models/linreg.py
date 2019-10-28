@@ -5,14 +5,18 @@ from sklearn.preprocessing import MinMaxScaler
 class LinReg(BaseModel):
     def __init__(self, config, dataset):
         super(LinReg, self).__init__(config, dataset)
+        '''
+        This simple Linear Regression module is for demonstrative example.
+        The model performance will not be guaranteed
+        '''
 
 
     def set_params(self):
         self.w = self.w_init()
-        self.alpha = self.config.alpha
+        self.alpha = self.config.linreg_alpha
 
     def w_init(self) :
-        if self.config.w_init == 'uniform' :
+        if self.config.linreg_w_init == 'uniform' :
             weight = np.random.uniform(-2,2,size=[22, 2])
 
         return weight
@@ -20,8 +24,8 @@ class LinReg(BaseModel):
     def preprocess(self):
         use_cols = ['FTHG','FTAG','home_wins', 'home_draws', 'home_losses', 'home_goals', 'home_oppos_goals',
                     'home_shots', 'home_oppos_shots', 'home_shotontarget', 'home_oppos_shotontarget',
-                    'away_wins', 'away_draws', 'away_losses', 'away_goals', 'away_oppos_goals',
-                    'away_shots', 'away_oppos_shots', 'away_shotontarget', 'away_oppos_shotontarget','Hodds','Dodds','Aodds']
+                    'away_wins', 'away_draws', 'away_losses', 'away_goals', 'away_oppos_goals', 'away_shots',
+                    'away_oppos_shots', 'away_shotontarget', 'away_oppos_shotontarget','Hodds','Dodds','Aodds']
 
         train = self.dataset.train_set[use_cols]
         test = self.dataset.test_set[use_cols]
@@ -60,7 +64,7 @@ class LinReg(BaseModel):
             self.w = self.w - self.alpha * np.transpose(gradient)
             print('iter {} : Home loss - {}  /  Away loss - {}'.format(iter, MSE[0],MSE[1]))
 
-            if np.mean(past_MSE - MSE) < self.config.tolerance :
+            if np.mean(past_MSE - MSE) < self.config.linreg_tolerance :
                 break
             past_MSE = MSE.copy()
 
