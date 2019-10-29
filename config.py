@@ -20,5 +20,4 @@ def get_args():
     argp.add_argument('--alpha', type=float, default=0.01)
 
 
-
     return argp.parse_args()
