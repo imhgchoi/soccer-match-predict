@@ -11,10 +11,22 @@ class BaseModel():
         print('parameters are not initialized for model')
         raise NotImplementedError
 
+    def preprocess(self):
+        '''
+        Should alter the dataset.train_set and dataset.test_set to the final data format used for training
+
+        self.dataset.trainX = ?
+        self.dataset.trainY = ?
+        self.dataset.testX = ?
+        self.dataset.testY = ?
+        '''
+        print('preprocessing logic is not implemented')
+        raise NotImplementedError
+
     def train(self):
         print('train logic is not implemented')
         raise NotImplementedError
 
-    def predict(self, data):
+    def predict(self):
         print('prediction logic is not implemented')
         raise NotImplementedError
