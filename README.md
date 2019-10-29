@@ -24,5 +24,5 @@ You may refer to the `config.py` file for details
 * [HyeongKyu Choi](https://github.com/imhgchoi)
 * [HyunHo Choi](https://github.com/chlgusgh715)
 * [JaeHyun Lee](https://github.com/LEE-JAE-HYUN179)
-* JiHwan Park
-* JuHyeon Shin
+* [JiHwan Park](https://github.com/thepark96)
+* [JuHyeon Shin](https://github.com/juhyeon1212)
