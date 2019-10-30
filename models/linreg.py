@@ -77,7 +77,7 @@ class LinReg(BaseModel):
         plt.plot(losses)
         plt.title('linear regression gradient descent loss')
         plt.ylabel('avg MSE')
-        plt.ylabel('epoch')
+        plt.xlabel('epoch')
         plt.savefig('./out/linreg_loss.png')
         plt.close()
 
