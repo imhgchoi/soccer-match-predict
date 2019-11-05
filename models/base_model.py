@@ -8,8 +8,7 @@ class BaseModel():
         self.set_params()
 
     def set_params(self):
-        print('parameters are not initialized for model')
-        raise NotImplementedError
+        raise NotImplementedError('parameters are not initialized for model')
 
     def preprocess(self):
         '''
@@ -20,13 +19,10 @@ class BaseModel():
         self.dataset.testX = ?
         self.dataset.testY = ?
         '''
-        print('preprocessing logic is not implemented')
-        raise NotImplementedError
+        raise NotImplementedError('preprocessing logic is not implemented')
 
     def train(self):
-        print('train logic is not implemented')
-        raise NotImplementedError
+        raise NotImplementedError('train logic is not implemented')
 
     def predict(self):
-        print('prediction logic is not implemented')
-        raise NotImplementedError
+        raise NotImplementedError('prediction logic is not implemented')

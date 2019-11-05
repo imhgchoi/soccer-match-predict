@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from models.base_model import BaseModel
 from sklearn.preprocessing import MinMaxScaler
 
@@ -53,6 +54,7 @@ class LinReg(BaseModel):
 
     def train(self):
         iter = 0
+        losses = []
         past_MSE = [9999999,9999999]
         while True :
             iter+=1
@@ -64,9 +66,20 @@ class LinReg(BaseModel):
             self.w = self.w - self.alpha * np.transpose(gradient)
             print('iter {} : Home loss - {}  /  Away loss - {}'.format(iter, MSE[0],MSE[1]))
 
+            loss_avg = (MSE[0] + MSE[1])/2
+            losses.append(loss_avg)
+
             if np.mean(past_MSE - MSE) < self.config.linreg_tolerance :
                 break
             past_MSE = MSE.copy()
+
+        # visualize descending loss value
+        plt.plot(losses)
+        plt.title('linear regression gradient descent loss')
+        plt.ylabel('avg MSE')
+        plt.xlabel('epoch')
+        plt.savefig('./out/linreg_loss.png')
+        plt.close()
 
 
 
