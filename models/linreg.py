@@ -18,7 +18,7 @@ class LinReg(BaseModel):
 
     def w_init(self) :
         if self.config.linreg_w_init == 'uniform' :
-            weight = np.random.uniform(-2,2,size=[22, 2])
+            weight = np.random.uniform(-2,2,size=[41, 2])
 
         return weight
 
@@ -26,7 +26,12 @@ class LinReg(BaseModel):
         use_cols = ['FTHG','FTAG','home_wins', 'home_draws', 'home_losses', 'home_goals', 'home_oppos_goals',
                     'home_shots', 'home_oppos_shots', 'home_shotontarget', 'home_oppos_shotontarget',
                     'away_wins', 'away_draws', 'away_losses', 'away_goals', 'away_oppos_goals', 'away_shots',
-                    'away_oppos_shots', 'away_shotontarget', 'away_oppos_shotontarget','Hodds','Dodds','Aodds']
+                    'away_oppos_shots', 'away_shotontarget', 'away_oppos_shotontarget',
+                    'home_oppos_wins', 'home_oppos_draws', 'home_oppos_losses', 'home_fouls', 'home_yellowcards',
+                    'home_redcards', 'home_cornerkicks', 'home_oppos_cornerkicks', 'home_oppos_fouls',
+                    'home_oppos_yellowcards', 'home_oppos_redcards', 'away_fouls', 'away_yellowcards', 'away_redcards',
+                    'away_cornerkicks', 'away_oppos_cornerkicks', 'away_oppos_fouls', 'away_oppos_yellowcards',
+                    'away_oppos_redcards', 'Hodds', 'Dodds', 'Aodds']
 
         train = self.dataset.train_set[use_cols]
         test = self.dataset.test_set[use_cols]
