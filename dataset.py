@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import datetime
 from utils import conjunction, union
+import pdb
 
 class Dataset():
     def __init__(self, config):
@@ -36,7 +37,7 @@ class Dataset():
 
         # filter columns - meta data @ http://www.football-data.co.uk/notes.txt
         use_col = ['Date','HomeTeam','AwayTeam','FTHG','FTAG','FTR','HTHG','HTAG','HTR','Referee','HS','AS','HST','AST',
-                   'HF','AF','HC','AC','HY','AY','HR','AR','Hodds','Dodds','Aodds']
+                   'HC','AC','HF','AF','HY','AY','HR','AR','Hodds','Dodds','Aodds']
         data = data[use_col]
 
         # accumulate histories
@@ -44,8 +45,13 @@ class Dataset():
         acc_hist = {'home_wins' : [], 'home_draws' : [], 'home_losses' : [], 'home_goals' : [], 'home_oppos_goals' : [],
                     'home_shots' : [], 'home_oppos_shots' : [], 'home_shotontarget' : [], 'home_oppos_shotontarget' : [],
                     'away_wins' : [], 'away_draws' : [], 'away_losses' : [], 'away_goals' : [], 'away_oppos_goals' : [],
-                    'away_shots' : [], 'away_oppos_shots' : [], 'away_shotontarget' : [], 'away_oppos_shotontarget' : []}
-
+                    'away_shots' : [], 'away_oppos_shots' : [], 'away_shotontarget' : [], 'away_oppos_shotontarget' : [],
+                    'home_oppos_wins' : [], 'home_oppos_draws' : [], 'home_oppos_losses' : [],
+                    'home_fouls' : [], 'home_yellowcards' : [], 'home_redcards' : [], 'home_cornerkicks' : [],
+                    'home_oppos_cornerkicks' : [], 'home_oppos_fouls' : [], 'home_oppos_yellowcards' : [], 'home_oppos_redcards' : [],
+                    'away_fouls' : [], 'away_yellowcards' : [], 'away_redcards' : [], 'away_cornerkicks' : [],
+                    'away_oppos_cornerkicks' : [],'away_oppos_fouls' : [], 'away_oppos_yellowcards' : [], 'away_oppos_redcards' : []}
+        d = 0
         for row in data.iterrows() :
             hometeam = row[1]['HomeTeam']
             awayteam = row[1]['AwayTeam']
@@ -56,7 +62,6 @@ class Dataset():
             temp2 = data[conjunction(data['HomeTeam']==awayteam, data['AwayTeam']==hometeam)]
             temp = pd.concat([temp1, temp2], axis=0)
             history = temp[temp['Date']<date].sort_values(by='Date').tail(self.config.lookback_opp_matches)
-
             # if opponent history is too short, continue
             if len(history) < self.config.lookback_opp_matches :
                 for key in list(acc_hist.keys()) :
@@ -66,8 +71,8 @@ class Dataset():
             # compute average number of goals scored against opponent in the past N matches with the opponent
             home = history[history['HomeTeam'] == hometeam]
             away = history[history['AwayTeam'] == hometeam]
-            home_sum = np.sum(home[['FTHG','FTAG','HS','AS','HST','AST']])
-            away_sum = np.sum(away[['FTHG','FTAG','HS','AS','HST','AST']])
+            home_sum = np.sum(home[['FTHG','FTAG','HS','AS','HST','AST','HC','AC','HF','AF','HY','AY','HR','AR']])
+            away_sum = np.sum(away[['FTHG','FTAG','HS','AS','HST','AST','HC','AC','HF','AF','HY','AY','HR','AR']])
 
 
             # filter recent N matches of both home and away
@@ -82,23 +87,59 @@ class Dataset():
                     acc_hist[key].append(np.nan)
                 continue
 
-            home_home_sum = np.sum(home[home['HomeTeam']==hometeam][['FTHG','HS','HST']])
-            home_away_sum = np.sum(home[home['AwayTeam']==hometeam][['FTAG','AS','AST']])
-            away_home_sum = np.sum(away[away['HomeTeam']==awayteam][['FTHG','HS','HST']])
-            away_away_sum = np.sum(away[away['AwayTeam']==awayteam][['FTAG','AS','AST']])
+            home_home_sum = np.sum(home[home['HomeTeam']==hometeam][['FTHG','HS','HST','HC','HF','HY','HR']])
+            home_away_sum = np.sum(home[home['AwayTeam']==hometeam][['FTAG','AS','AST','AC','AF','AY','AR']])
+            away_home_sum = np.sum(away[away['HomeTeam']==awayteam][['FTHG','HS','HST','HC','HF','HY','HR']])
+            away_away_sum = np.sum(away[away['AwayTeam']==awayteam][['FTAG','AS','AST','AC','AF','AY','AR']])
 
+            # append computation results to dictionary
             acc_hist['home_oppos_goals'].append((home_sum['FTHG'] + away_sum['FTAG']) / self.config.lookback_opp_matches)
             acc_hist['away_oppos_goals'].append((home_sum['FTAG'] + away_sum['FTHG']) / self.config.lookback_opp_matches)
             acc_hist['home_oppos_shots'].append((home_sum['HS'] + away_sum['AS']) / self.config.lookback_opp_matches)
             acc_hist['away_oppos_shots'].append((home_sum['AS'] + away_sum['HS']) / self.config.lookback_opp_matches)
             acc_hist['home_oppos_shotontarget'].append((home_sum['HST'] + away_sum['AST']) / self.config.lookback_opp_matches)
             acc_hist['away_oppos_shotontarget'].append((home_sum['AST'] + away_sum['HST']) / self.config.lookback_opp_matches)
+            acc_hist['home_oppos_cornerkicks'].append((home_sum['HC'] + away_sum['AC']) / self.config.lookback_opp_matches)
+            acc_hist['away_oppos_cornerkicks'].append((home_sum['AC'] + away_sum['HC']) / self.config.lookback_opp_matches)
+            acc_hist['home_oppos_fouls'].append((home_sum['HF'] + away_sum['AF']) / self.config.lookback_opp_matches)
+            acc_hist['away_oppos_fouls'].append((home_sum['AF'] + away_sum['HF']) / self.config.lookback_opp_matches)
+            acc_hist['home_oppos_yellowcards'].append((home_sum['HY'] + away_sum['AY']) / self.config.lookback_opp_matches)
+            acc_hist['away_oppos_yellowcards'].append((home_sum['AY'] + away_sum['HY']) / self.config.lookback_opp_matches)
+            acc_hist['home_oppos_redcards'].append((home_sum['HR'] + away_sum['AR']) / self.config.lookback_opp_matches)
+            acc_hist['away_oppos_redcards'].append((home_sum['AR'] + away_sum['HR']) / self.config.lookback_opp_matches)
+
             acc_hist['home_goals'].append((home_home_sum['FTHG'] + home_away_sum['FTAG']) / self.config.lookback_matches)
             acc_hist['away_goals'].append((away_home_sum['FTHG'] + away_away_sum['FTAG']) / self.config.lookback_matches)
             acc_hist['home_shots'].append((home_home_sum['HS'] + home_away_sum['AS']) / self.config.lookback_matches)
             acc_hist['away_shots'].append((away_home_sum['HS'] + away_away_sum['AS']) / self.config.lookback_matches)
             acc_hist['home_shotontarget'].append((home_home_sum['HST'] + home_away_sum['AST']) / self.config.lookback_matches)
             acc_hist['away_shotontarget'].append((away_home_sum['HST'] + away_away_sum['AST']) / self.config.lookback_matches)
+            acc_hist['home_cornerkicks'].append((home_home_sum['HC'] + home_away_sum['AC']) / self.config.lookback_matches)
+            acc_hist['away_cornerkicks'].append((away_home_sum['HC'] + away_away_sum['AC']) / self.config.lookback_matches)
+            acc_hist['home_fouls'].append((home_home_sum['HF'] + home_away_sum['AF']) / self.config.lookback_matches)
+            acc_hist['away_fouls'].append((away_home_sum['HF'] + away_away_sum['AF']) / self.config.lookback_matches)
+            acc_hist['home_yellowcards'].append((home_home_sum['HY'] + home_away_sum['AY']) / self.config.lookback_matches)
+            acc_hist['away_yellowcards'].append((away_home_sum['HY'] + away_away_sum['AY']) / self.config.lookback_matches)
+            acc_hist['home_redcards'].append((home_home_sum['HR'] + home_away_sum['AR']) / self.config.lookback_matches)
+            acc_hist['away_redcards'].append((away_home_sum['HR'] + away_away_sum['AR']) / self.config.lookback_matches)
+
+
+            # count ratio of wins / draws / losses in the past N matches of Home vs Away
+            res = []
+            for r in history.iterrows() :
+                if r[1]['HomeTeam'] == hometeam :
+                    res.append(r[1]['FTR'])
+                else :
+                    if r[1]['FTR'] == 'A' :
+                        res.append('H')
+                    elif r[1]['FTR'] == 'H' :
+                        res.append('A')
+                    else :
+                        res.append('D')
+            acc_hist['home_oppos_wins'].append(res.count('H') / self.config.lookback_opp_matches)
+            acc_hist['home_oppos_draws'].append(res.count('D') / self.config.lookback_opp_matches)
+            acc_hist['home_oppos_losses'].append(res.count('A') / self.config.lookback_opp_matches)
+
 
             # count ratio of wins / draws / losses in the past N matches
             res = []

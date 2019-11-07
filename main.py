@@ -3,12 +3,18 @@ from dataset import Dataset
 from trainer import Trainer
 from evaluator import Evaluator
 from models.linreg import LinReg
+from models.knn_classifier import KNNClassifier
 import pickle
 
 
 def get_model(config, dataset) :
+    '''
+    ADD BRANCH HERE, IF YOU HAVE ADDED A MODEL INTO models FOLDER
+    '''
     if config.model_type == 'linreg' :
         model = LinReg(config, dataset)
+    elif config.model_type == 'knnclass' :
+        model = KNNClassifier(config, dataset)
 
     return model
 
@@ -16,7 +22,7 @@ def main():
     config = get_args()
 
     # saves the dataset object as pickle file for quick use
-    if not config.use_prepro_v1 :
+    if not config.use_preprocessed :
         dataset = Dataset(config)
         with open(config.datadir+'prepro_v1.pkl', 'wb') as f:
             pickle.dump(dataset, f, pickle.HIGHEST_PROTOCOL)
@@ -38,5 +44,3 @@ def main():
 
 if __name__ == '__main__' :
     main()
-
-##임시 수정 코드
