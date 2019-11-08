@@ -24,6 +24,12 @@ def get_args():
     argp.add_argument('--linreg_alpha', type=float, default=0.01)
     argp.add_argument('--linreg_tolerance', type=float, default=1e-7)
 
+    # svm regression
+    argp.add_argument('--svm_w_init', type=str, default='uniform', choices=['uniform', 'xavier'])
+    argp.add_argument('--svm_alpha', type=float, default=0.0001)
+    argp.add_argument('--svm_tolerance', type=float, default=1e-8)
+    argp.add_argument('--svm_delta', type=float, default=2)
+
     # KNN classification
     argp.add_argument('--knn_k', type=int, default=11)
 

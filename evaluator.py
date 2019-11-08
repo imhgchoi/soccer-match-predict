@@ -72,7 +72,6 @@ class Evaluator():
 
     def classification_metrics(self):
         train_out, test_out = self.model.predict()
-
         # Classification Reports
         print('---Train set confusion matrix and classification report---')
         print(confusion_matrix(train_out, self.trainY))

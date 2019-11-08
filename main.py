@@ -3,6 +3,7 @@ from dataset import Dataset
 from trainer import Trainer
 from evaluator import Evaluator
 from models.linreg import LinReg
+from models.svm import SVM
 from models.knn_classifier import KNNClassifier
 import pickle
 
@@ -15,6 +16,8 @@ def get_model(config, dataset) :
         model = LinReg(config, dataset)
     elif config.model_type == 'knnclass' :
         model = KNNClassifier(config, dataset)
+    elif config.model_type=='svm':
+        model = SVM(config, dataset)
 
     return model
 

@@ -89,6 +89,7 @@ class LinReg(BaseModel):
 
 
 
+
     def predict(self):
         '''
         Refers to parameters and produce predictions
