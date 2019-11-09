@@ -5,6 +5,7 @@ from evaluator import Evaluator
 from models.linreg import LinReg
 from models.svm import SVM
 from models.knn_classifier import KNNClassifier
+from models.logreg_classifier import LogisticRegression
 import pickle
 
 
@@ -18,6 +19,9 @@ def get_model(config, dataset) :
         model = KNNClassifier(config, dataset)
     elif config.model_type=='svm':
         model = SVM(config, dataset)
+    elif config.model_type == 'logreg':
+        model = LogisticRegression(config, dataset)
+
 
     return model
 

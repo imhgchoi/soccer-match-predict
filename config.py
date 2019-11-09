@@ -33,6 +33,11 @@ def get_args():
     # KNN classification
     argp.add_argument('--knn_k', type=int, default=11)
 
+    # Logistic Regression
+    argp.add_argument('--logreg_w_init', type=str, default='uniform', choices=['uniform', 'xavier'])
+    argp.add_argument('--logreg_alpha', type=float, default=0.01)
+    argp.add_argument('--logreg_tolerance', type=float, default=1e-7)
+
     # evaluation
     argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])
     argp.add_argument('--bet_money', type=int, default=5000)

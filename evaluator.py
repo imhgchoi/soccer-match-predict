@@ -93,6 +93,11 @@ class Evaluator():
             train_actual = self.reg_to_class(self.trainY)
             test_pred = self.reg_to_class(test_out)
             test_actual = self.reg_to_class(self.testY)
+        elif self.config.model_type == 'logreg':
+            train_pred = train_out
+            train_actual = self.trainY.flatten()
+            test_pred = test_out
+            test_actual = self.testY.flatten()
         else :
             train_pred = train_out
             train_actual = self.trainY
