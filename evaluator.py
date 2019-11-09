@@ -115,36 +115,63 @@ class Evaluator():
         train_res = pd.concat([train_res, self.model.dataset.train_set[['Hodds','Dodds','Aodds']].reset_index(drop=True)], axis=1)
         test_res = pd.concat([test_res, self.model.dataset.test_set[['Hodds','Dodds','Aodds']].reset_index(drop=True)], axis=1)
 
+        # generate random benchmark
+        train_res['rand_pred'] = np.random.randint(0,3,size=train_res.shape[0])
+        test_res['rand_pred'] = np.random.randint(0,3,size=test_res.shape[0])
+        train_res['rand_correct'] = train_res['rand_pred'] == train_res['actual']
+        test_res['rand_correct'] = test_res['rand_pred'] == test_res['actual']
+
         # compute profit for train
         train_profit = 0
         train_profit_list = [0]
+        rand_profit = 0
+        rand_profit_list = [0]
         for idx, row in enumerate(train_res.iterrows()) :
             train_profit -= self.config.bet_money
+            rand_profit -= self.config.bet_money
             if row[1]['correct'] :
                 train_profit += (row[1][3+row[1]['pred']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
+            if row[1]['rand_correct'] :
+                rand_profit += (row[1][3+row[1]['rand_correct']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             train_profit_list.append(train_profit / (self.config.bet_money * (idx+1)))
+            rand_profit_list.append(rand_profit / (self.config.bet_money * (idx+1)))
         print('Train set Net Profit : ', train_profit)
         print('Train set Return on Investment [ Net Profit / Total Money Invested ] : ', train_profit / (self.config.bet_money * train_res.shape[0]))
-        plt.plot(train_profit_list[int(len(train_profit_list)*0.2):])
+        print('Train Random Net Profit : ', rand_profit)
+        print('Train Random Return on Investment [ Net Profit / Total Money Invested ] : ', rand_profit / (self.config.bet_money * train_res.shape[0]))
+        print('\n')
+        plt.plot(train_profit_list[int(len(train_profit_list)*0.1):])
+        plt.plot(rand_profit_list[int(len(rand_profit_list)*0.1):])
         plt.title('Train Set Bet Backtest')
         plt.xlabel('Soccer Match Sequence')
         plt.ylabel('Return on Investment [ Net Profit / Total Money Invested ]')
+        plt.legend(['train','random'])
         plt.savefig('./out/{}_train_profit.png'.format(self.config.model_type))
         plt.close()
 
         # compute profit for test
         test_profit = 0
         test_profit_list = [0]
+        rand_profit = 0
+        rand_profit_list = [0]
         for idx, row in enumerate(test_res.iterrows()) :
             test_profit -= self.config.bet_money
+            rand_profit -= self.config.bet_money
             if row[1]['correct'] :
                 test_profit += (row[1][3+row[1]['pred']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
+            if row[1]['rand_correct'] :
+                rand_profit += (row[1][3+row[1]['rand_correct']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             test_profit_list.append(test_profit / (self.config.bet_money * (idx+1)))
+            rand_profit_list.append(rand_profit / (self.config.bet_money * (idx+1)))
         print('Test set Net Profit : ', test_profit)
         print('Test set Return on Investment [ Net Profit / Total Money Invested ] : ', test_profit / (self.config.bet_money * test_res.shape[0]))
+        print('Test Random Net Profit : ', rand_profit)
+        print('Test Random Return on Investment [ Net Profit / Total Money Invested ] : ', rand_profit / (self.config.bet_money * test_res.shape[0]))
         plt.plot(test_profit_list[int(len(test_profit_list)*0.1):])
+        plt.plot(rand_profit_list[int(len(rand_profit_list)*0.1):])
         plt.title('Test Set Bet Backtest')
         plt.xlabel('Soccer Match Sequence')
         plt.ylabel('Return on Investment [ Net Profit / Total Money Invested ]')
+        plt.legend(['test','random'])
         plt.savefig('./out/{}_test_profit.png'.format(self.config.model_type))
         plt.close()
