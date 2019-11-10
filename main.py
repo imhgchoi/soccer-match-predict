@@ -5,6 +5,7 @@ from evaluator import Evaluator
 from models.linreg import LinReg
 from models.svm import SVM
 from models.knn_classifier import KNNClassifier
+from models.knn_regressor import KNNRegressor
 from models.logreg_classifier import LogisticRegression
 from models.mlp_classifier import MLPClassifier
 from models.mlp_regressor import MLPRegressor
@@ -19,6 +20,8 @@ def get_model(config, dataset) :
         model = LinReg(config, dataset)
     elif config.model_type == 'knnclass' :
         model = KNNClassifier(config, dataset)
+    elif config.model_type == 'knnreg' :
+        model = KNNRegressor(config, dataset)
     elif config.model_type=='svm':
         model = SVM(config, dataset)
     elif config.model_type == 'logreg':
