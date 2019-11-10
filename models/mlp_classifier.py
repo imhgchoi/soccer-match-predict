@@ -89,7 +89,7 @@ class MLPClassifier(BaseModel):
             self.out = self.out - self.alpha * out_grad
 
             # exit condition
-            if e > 100 and (losses[-2] - losses[-1] < self.tol and losses[-2] - losses[-1] > 0):
+            if e > 10000 and (losses[-2] - losses[-1] < self.tol and losses[-2] - losses[-1] > 0):
                 break
 
         plt.plot(losses)
