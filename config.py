@@ -37,6 +37,7 @@ def get_args():
     argp.add_argument('--logreg_w_init', type=str, default='uniform', choices=['uniform', 'xavier'])
     argp.add_argument('--logreg_alpha', type=float, default=0.01)
     argp.add_argument('--logreg_tolerance', type=float, default=1e-7)
+    #argp.add_argument('--logreg_max_iter', type=int, default=40000)
 
     # evaluation
     argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])

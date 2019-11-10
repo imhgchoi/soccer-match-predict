@@ -13,6 +13,7 @@ class LogisticRegression(BaseModel):
     def set_params(self):
         self.log_w = self.log_w_init()
         self.log_alpha = self.config.logreg_alpha
+        #self.max_iter=self.config.logreg_max_iter
 
     def log_w_init(self) :
         if self.config.logreg_w_init == 'uniform' :
@@ -62,28 +63,27 @@ class LogisticRegression(BaseModel):
 
     def train(self):
         iter = [0,0,0]
-        past_MSE = [9999999, 9999999,9999999]
+        past_NLL = [9999999, 9999999,9999999]
         classes=[0,1,2]
         self.weights=[[],[],[]]
         for c in classes:
-            positive_y=np.where(self.dataset.trainY==c,1,0)
+            binary_y=np.where(self.dataset.trainY==c,1,0)
             self.weights[c]=self.log_w_init()
             while True:
                 iter[c] += 1
                 z = np.matmul(self.dataset.trainX, self.weights[c])
                 h=1 / (1 + np.exp(-z))
-                error=h-positive_y
-                error_matrix = (error) ** 2
-                MSE = 1 / (2 * h.shape[0]) * np.sum(error_matrix, axis=0)
+                error=h-binary_y
+                NLL = -1 / h.shape[0] * (np.matmul(np.transpose(np.log(h)),binary_y)+np.matmul(np.transpose(np.log(1-h)),1-binary_y))
                 gradient = 1 / h.shape[0] * np.matmul(np.transpose(error), self.dataset.trainX)
 
                 self.weights[c]=self.weights[c] - self.log_alpha * np.transpose(gradient)
-                print('iter {} : {}'.format(iter, MSE))
+                print('iter {} : NLL {}'.format(iter, NLL))
 
-                if (past_MSE[c] - MSE) < self.config.logreg_tolerance:
-
+                #if ((past_NLL[c] - NLL) < self.config.logreg_tolerance) or (iter[c]>=self.max_iter):
+                if (past_NLL[c] - NLL) < self.config.logreg_tolerance:
                     break
-                past_MSE[c] = MSE.copy()
+                past_NLL[c] = NLL.copy()
 
 
     def predict(self):
