@@ -6,6 +6,8 @@ from models.linreg import LinReg
 from models.svm import SVM
 from models.knn_classifier import KNNClassifier
 from models.logreg_classifier import LogisticRegression
+from models.mlp_classifier import MLPClassifier
+from models.mlp_regressor import MLPRegressor
 import pickle
 
 
@@ -21,6 +23,10 @@ def get_model(config, dataset) :
         model = SVM(config, dataset)
     elif config.model_type == 'logreg':
         model = LogisticRegression(config, dataset)
+    elif config.model_type == 'mlpclass' :
+        model = MLPClassifier(config, dataset)
+    elif config.model_type == 'mlpreg' :
+        model = MLPRegressor(config, dataset)
 
 
     return model

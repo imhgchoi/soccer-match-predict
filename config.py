@@ -16,8 +16,8 @@ def get_args():
     argp.add_argument('--lookback_matches', type=int, default=5)   # how many previous matches of a team to refer to
 
     # Model General
-    argp.add_argument('--model_type', type=str, default='linreg', choices=['linreg','ridge','lasso','logreg','svm','nnreg',
-                                                                           'nnclass','kernelreg','knnreg','knnclass'])
+    argp.add_argument('--model_type', type=str, default='linreg', choices=['linreg','ridge','lasso','logreg','svm','mlpreg',
+                                                                           'mlpclass','kernelreg','knnreg','knnclass'])
 
     # linear regression
     argp.add_argument('--linreg_w_init', type=str, default='uniform', choices=['uniform','xavier'])
@@ -38,6 +38,11 @@ def get_args():
     argp.add_argument('--logreg_alpha', type=float, default=0.01)
     argp.add_argument('--logreg_tolerance', type=float, default=1e-7)
     #argp.add_argument('--logreg_max_iter', type=int, default=40000)
+
+    # MLP classification
+
+    # MLP regression
+
 
     # evaluation
     argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])
