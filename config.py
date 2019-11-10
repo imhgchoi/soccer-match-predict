@@ -40,8 +40,18 @@ def get_args():
     #argp.add_argument('--logreg_max_iter', type=int, default=40000)
 
     # MLP classification
+    argp.add_argument('--mlpclass_w_init', type=str, default='uniform', choices=['uniform','xavier'])
+    argp.add_argument('--mlpclass_alpha', type=float, default=0.0003)
+    argp.add_argument('--mlpclass_maxiter', type=int, default=100000)
+    argp.add_argument('--mlpclass_tolerance', type=float, default=1e-4)
+    argp.add_argument('--mlpclass_printstep', type=int, default=200)
 
     # MLP regression
+    argp.add_argument('--mlpreg_w_init', type=str, default='uniform', choices=['uniform','xavier'])
+    argp.add_argument('--mlpreg_alpha', type=float, default=0.0003)
+    argp.add_argument('--mlpreg_maxiter', type=int, default=100000)
+    argp.add_argument('--mlpreg_tolerance', type=float, default=1e-4)
+    argp.add_argument('--mlpreg_printstep', type=int, default=200)
 
 
     # evaluation
