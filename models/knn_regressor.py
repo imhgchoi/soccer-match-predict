@@ -14,7 +14,7 @@ class KNNRegressor(BaseModel):
         self.k = self.config.knn_k
 
     def preprocess(self):
-        use_cols = ['FTR','home_wins', 'home_draws', 'home_losses', 'home_goals', 'home_oppos_goals',
+        use_cols = ['FTHG','FTAG','home_wins', 'home_draws', 'home_losses', 'home_goals', 'home_oppos_goals',
                     'home_shots', 'home_oppos_shots', 'home_shotontarget', 'home_oppos_shotontarget',
                     'away_wins', 'away_draws', 'away_losses', 'away_goals', 'away_oppos_goals', 'away_shots',
                     'away_oppos_shots', 'away_shotontarget', 'away_oppos_shotontarget',
@@ -27,15 +27,11 @@ class KNNRegressor(BaseModel):
         train = self.dataset.train_set[use_cols]
         test = self.dataset.test_set[use_cols]
 
-        # encode label
-        train['FTR'] = train['FTR'].replace('H',0).replace('D',1).replace('A',2)
-        test['FTR'] = test['FTR'].replace('H',0).replace('D',1).replace('A',2)
-
         # separate X, Y Dataset
-        trainY = np.array(train.iloc[:,:1]).flatten()
-        trainX = np.array(train.iloc[:,1:])
-        testY = np.array(test.iloc[:,:1]).flatten()
-        testX = np.array(test.iloc[:,1:])
+        trainY = np.array(train.iloc[:,:2])
+        trainX = np.array(train.iloc[:,2:])
+        testY = np.array(test.iloc[:,:2])
+        testX = np.array(test.iloc[:,2:])
 
         # apply min max scaling
         scaler = MinMaxScaler()
@@ -59,17 +55,16 @@ class KNNRegressor(BaseModel):
             euc_dists = np.linalg.norm(self.dataset.trainX - row, axis=1)
             indices = np.argpartition(euc_dists, self.k)[:self.k]
             k_predictions = self.dataset.trainY[indices]
-            voted_prediction = stats.mode(k_predictions)[0][0]
-            train_out.append(voted_prediction)
+            avged_prediction = np.round(np.mean(k_predictions, axis=0))
+            train_out.append(avged_prediction)
 
         test_out = []
         for row in self.dataset.testX:
             euc_dists = np.linalg.norm(self.dataset.trainX - row, axis=1)
             indices = np.argpartition(euc_dists, self.k)[:self.k]
             k_predictions = self.dataset.trainY[indices]
-            voted_prediction = stats.mode(k_predictions)[0][0]
-            test_out.append(voted_prediction)
+            avged_prediction = np.round(np.mean(k_predictions, axis=0))
+            test_out.append(avged_prediction)
 
-
-        return train_out, test_out
+        return np.array(train_out), np.array(test_out)
 
