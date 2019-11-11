@@ -2,3 +2,5 @@ data/
 out/
 .idea/
 __pycache__/
+models/__pycache__/
+.DS_Store
