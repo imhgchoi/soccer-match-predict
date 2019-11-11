@@ -24,6 +24,13 @@ def get_args():
     argp.add_argument('--linreg_alpha', type=float, default=0.01)
     argp.add_argument('--linreg_tolerance', type=float, default=1e-7)
 
+    # ridge regression
+    argp.add_argument('--ridgereg_w_init', type=str, default='uniform', choices=['uniform','xavier'])
+    argp.add_argument('--ridgereg_alpha', type=float, default=0.01)
+    argp.add_argument('--ridgereg_tolerance', type=float, default=1e-7)
+    argp.add_argument('--ridgereg_beta', type=float, default=0.5)
+
+
     # svm regression
     argp.add_argument('--svm_w_init', type=str, default='uniform', choices=['uniform', 'xavier'])
     argp.add_argument('--svm_alpha', type=float, default=0.0001)
