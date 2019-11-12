@@ -143,9 +143,9 @@ class Evaluator():
             if row[1]['correct'] :
                 train_profit += (row[1][3+row[1]['pred']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             if row[1]['rand_correct'] :
-                rand_profit += (row[1][3+row[1]['rand_correct']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
+                rand_profit += (row[1][3+row[1]['rand_pred']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             if row[1]['copycat_correct'] :
-                copy_profit += (row[1][3+row[1]['copycat_correct']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
+                copy_profit += (row[1][3+row[1]['copycat']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             train_profit_list.append(train_profit / (self.config.bet_money * (idx+1)))
             rand_profit_list.append(rand_profit / (self.config.bet_money * (idx+1)))
             copy_profit_list.append(copy_profit / (self.config.bet_money * (idx+1)))
@@ -180,9 +180,9 @@ class Evaluator():
             if row[1]['correct'] :
                 test_profit += (row[1][3+row[1]['pred']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             if row[1]['rand_correct'] :
-                rand_profit += (row[1][3+row[1]['rand_correct']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
+                rand_profit += (row[1][3+row[1]['rand_pred']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             if row[1]['copycat_correct'] :
-                copy_profit += (row[1][3+row[1]['copycat_correct']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
+                copy_profit += (row[1][3+row[1]['copycat']] * self.config.bet_money) * (1-self.config.commission) * (1-self.config.tax)
             test_profit_list.append(test_profit / (self.config.bet_money * (idx+1)))
             rand_profit_list.append(rand_profit / (self.config.bet_money * (idx+1)))
             copy_profit_list.append(copy_profit / (self.config.bet_money * (idx+1)))
