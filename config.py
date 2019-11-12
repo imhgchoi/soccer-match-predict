@@ -52,9 +52,10 @@ def get_args():
     argp.add_argument('--mlpclass_maxiter', type=int, default=100000)
     argp.add_argument('--mlpclass_tolerance', type=float, default=1e-4)
     argp.add_argument('--mlpclass_printstep', type=int, default=200)
-    argp.add_argument('--mlpclass_dropout', type=float, default=0.0)
-    argp.add_argument('--mlpclass_decision_threshold', type=float, default=0.5)
-
+    argp.add_argument('--mlpclass_dropout', type=float, default=0.3)
+    argp.add_argument('--mlpclass_decision_threshold', type=float, default=0.45)
+    argp.add_argument('--mlpclass_optimizer', type=str, default='gd', choices=['gd','nag','rmsprop'])
+    argp.add_argument('--mlpclass_momentum', type=float, default=0.3)
 
     # evaluation
     argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])
