@@ -124,7 +124,7 @@ class MLPClassifier(BaseModel):
 
         train_odds = np.argmin(np.array(self.dataset.train_set[['Hodds','Dodds','Aodds']]),axis=1)
         test_odds = np.argmin(np.array(self.dataset.test_set[['Hodds','Dodds','Aodds']]),axis=1)
-        
+
         train_out = train_mask * np.argmax(train_out, axis=1) + np.invert(train_mask) * train_odds
         test_out = test_mask * np.argmax(test_out, axis=1)+ np.invert(test_mask) * test_odds
         self.phase = 'train'  # just in case

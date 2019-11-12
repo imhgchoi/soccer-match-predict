@@ -59,8 +59,8 @@ def get_args():
     # evaluation
     argp.add_argument('--eval_metrics', nargs='+', type=str, default=['mse','mae'], choices=['mse','mae'])
     argp.add_argument('--bet_money', type=int, default=5000)
-    argp.add_argument('--commission', type=float, default=0.0)
-    argp.add_argument('--tax', type=float, default=0.0)
+    argp.add_argument('--commission', type=float, default=0.05)
+    argp.add_argument('--tax', type=float, default=0.22)
 
 
     return argp.parse_args()
