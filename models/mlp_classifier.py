@@ -15,8 +15,12 @@ class MLPClassifier(BaseModel):
 
         self.alpha = self.config.mlpclass_alpha
         self.maxiter = self.config.mlpclass_maxiter
+        self.dropout = self.config.mlpclass_dropout
         self.tol = self.config.mlpclass_tolerance
         self.printstep = self.config.mlpclass_printstep
+
+        self.phase = 'train'
+        self.decision_threshold = self.config.mlpclass_decision_threshold
 
     def preprocess(self):
         use_cols = ['FTR', 'home_wins', 'home_draws', 'home_losses', 'home_goals', 'home_oppos_goals',
@@ -54,6 +58,15 @@ class MLPClassifier(BaseModel):
         self.dataset.testY = testY
 
     def forward(self, X):
+        # dropout
+        dropout_num = int(np.round(self.hidden.shape[1] * self.dropout))
+        rand_idx = np.random.randint(0,self.hidden.shape[1],dropout_num)
+        if self.phase == 'train' :
+            dropout_hidden = self.hidden.copy()
+            dropout_hidden[:, rand_idx] = 0
+            dropout_out = self.out.copy()
+            dropout_out[rand_idx, :] = 0
+
         # add 1 for bias input --> multiply weights --> activation function
         X = np.concatenate((X, np.ones([X.shape[0],1])), axis=1)
         h = np.matmul(X, self.hidden)
@@ -62,7 +75,7 @@ class MLPClassifier(BaseModel):
         h_ = np.concatenate((h, np.ones([h.shape[0],1])), axis=1)
         out = np.exp(np.matmul(h_, self.out))
         out = out / np.expand_dims(np.sum(out, axis=1), axis=1)
-        return h_, out
+        return rand_idx, h_, out
 
 
     def train(self):
@@ -72,7 +85,7 @@ class MLPClassifier(BaseModel):
 
         for e in range(self.maxiter) :
             # forward propagation
-            h, out = self.forward(self.dataset.trainX)
+            dropout_idx, h, out = self.forward(self.dataset.trainX)
 
             loss = np.mean(np.sum(-(trainY * np.log(out)), axis =1))
             losses.append(loss)
@@ -83,6 +96,9 @@ class MLPClassifier(BaseModel):
             out_grad = np.transpose(np.matmul(np.transpose(out-trainY), h))
             hidden_grad =  np.transpose(np.matmul(np.transpose(np.matmul(out-trainY, np.transpose(self.out[:-1,:]))
                                                                * (h[:,:-1]*(1-h[:,:-1]))), trainX_))
+            # apply dropout
+            hidden_grad[:, dropout_idx] = 0
+            out_grad[dropout_idx, :] = 0
 
             # weight update
             self.hidden = self.hidden - self.alpha * hidden_grad
@@ -100,9 +116,16 @@ class MLPClassifier(BaseModel):
         plt.close()
 
     def predict(self):
-        _, train_out = self.forward(self.dataset.trainX)
-        _, test_out = self.forward(self.dataset.testX)
+        self.phase = 'test'
+        _, _, train_out = self.forward(self.dataset.trainX)
+        _, _, test_out = self.forward(self.dataset.testX)
+        train_mask = np.max(train_out, axis=1) >= self.decision_threshold
+        test_mask = np.max(test_out, axis=1) >= self.decision_threshold
 
-        train_out = np.argmax(train_out, axis=1)
-        test_out = np.argmax(test_out, axis=1)
+        train_odds = np.argmin(np.array(self.dataset.train_set[['Hodds','Dodds','Aodds']]),axis=1)
+        test_odds = np.argmin(np.array(self.dataset.test_set[['Hodds','Dodds','Aodds']]),axis=1)
+        
+        train_out = train_mask * np.argmax(train_out, axis=1) + np.invert(train_mask) * train_odds
+        test_out = test_mask * np.argmax(test_out, axis=1)+ np.invert(test_mask) * test_odds
+        self.phase = 'train'  # just in case
         return train_out, test_out
