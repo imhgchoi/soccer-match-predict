@@ -2,6 +2,7 @@ import numpy as np
 from models.base_model import BaseModel
 from sklearn.preprocessing import MinMaxScaler
 from scipy import stats
+import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -13,7 +14,7 @@ class LogisticRegression(BaseModel):
     def set_params(self):
         self.log_w = self.log_w_init()
         self.log_alpha = self.config.logreg_alpha
-        #self.max_iter=self.config.logreg_max_iter
+
 
     def log_w_init(self) :
         if self.config.logreg_w_init == 'uniform' :
@@ -66,7 +67,10 @@ class LogisticRegression(BaseModel):
         past_NLL = [9999999, 9999999,9999999]
         classes=[0,1,2]
         self.weights=[[],[],[]]
+ 
+
         for c in classes:
+            losses=[]
             binary_y=np.where(self.dataset.trainY==c,1,0)
             self.weights[c]=self.log_w_init()
             while True:
@@ -79,11 +83,31 @@ class LogisticRegression(BaseModel):
 
                 self.weights[c]=self.weights[c] - self.log_alpha * np.transpose(gradient)
                 print('iter {} : NLL {}'.format(iter, NLL))
-
-                #if ((past_NLL[c] - NLL) < self.config.logreg_tolerance) or (iter[c]>=self.max_iter):
+                losses.append(NLL[0])
                 if (past_NLL[c] - NLL) < self.config.logreg_tolerance:
                     break
                 past_NLL[c] = NLL.copy()
+            if c==0:
+                plt.plot(losses)
+                plt.title('home win logreg classifier gradient descent loss')
+                plt.ylabel('NLL')
+                plt.xlabel('iteration')
+                plt.savefig('./out/Logistic_loss_homewin.png')
+                plt.close()
+            elif c==1:
+                plt.plot(losses)
+                plt.title('draw logreg classifier gradient descent loss')
+                plt.ylabel('NLL')
+                plt.xlabel('iteration')
+                plt.savefig('./out/Logistic_loss_draw.png')
+                plt.close()
+            elif c==2:
+                plt.plot(losses)
+                plt.title('away win logreg classifier gradient descent loss')
+                plt.ylabel('NLL')
+                plt.xlabel('iteration')
+                plt.savefig('./out/Logistic_loss_awaywin.png')
+                plt.close()
 
 
     def predict(self):
