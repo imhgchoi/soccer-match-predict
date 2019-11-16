@@ -12,6 +12,7 @@ class SVM(BaseModel):
         self.w = self.w_init()
         self.alpha = self.config.svm_alpha
         self.delta = self.config.svm_delta
+        self.C = self.config.svm_C
 
     def w_init(self):
         if self.config.svm_w_init == 'uniform':
@@ -123,6 +124,7 @@ class SVM(BaseModel):
                     gradient_w[:, y[i]] -= x[i, :]
                     gradient_w[:, j] += x[i, :]
         loss = loss / num_train
+        gradient_w = w + self.C * gradient_w
         return gradient_w, loss
 
     def predict(self):

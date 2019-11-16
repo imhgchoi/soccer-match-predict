@@ -36,6 +36,7 @@ def get_args():
     argp.add_argument('--svm_alpha', type=float, default=0.0001)
     argp.add_argument('--svm_tolerance', type=float, default=1e-8)
     argp.add_argument('--svm_delta', type=float, default=2)
+    argp.add_argument('--svm_C', type=float, default=1)
 
     # KNN classification & regression
     argp.add_argument('--knn_k', type=int, default=11)
