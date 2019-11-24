@@ -22,15 +22,15 @@ class Evaluator():
 
     def evaluate(self):
         print("\n\n###################################### EVALUATION ######################################\n")
-        if self.config.model_type in ['linreg','kernelreg','nnreg','knnreg','ridge','lasso'] :
-            self.regression_metrics()
-        else :
-            self.classification_metrics()
-        self.profitability()
-
-
-    def regression_metrics(self):
         train_out, test_out = self.model.predict()
+        if self.config.model_type in ['linreg','kernelreg','nnreg','knnreg','ridge','lasso'] :
+            self.regression_metrics(train_out, test_out)
+        else :
+            self.classification_metrics(train_out, test_out)
+        self.profitability(train_out, test_out)
+
+
+    def regression_metrics(self, train_out, test_out):
 
         # Regression Evaluation Metrics
         if 'mse' in self.config.eval_metrics :
@@ -69,9 +69,11 @@ class Evaluator():
         print('accuracy : {0:.4f}\n'.format(accuracy_score(test_pred, test_actual)))
         print(classification_report(test_pred, test_actual))
 
+        return train_out, test_out
 
-    def classification_metrics(self):
-        train_out, test_out = self.model.predict()
+
+    def classification_metrics(self, train_out, test_out):
+
         # Classification Reports
         print('---Train set confusion matrix and classification report---')
         print(confusion_matrix(train_out, self.trainY))
@@ -82,10 +84,11 @@ class Evaluator():
         print('accuracy : {0:.4f}\n'.format(accuracy_score(test_out, self.testY)))
         print(classification_report(test_out, self.testY))
 
+        return train_out, test_out
 
-    def profitability(self):
+
+    def profitability(self, train_out, test_out):
         print('---Profitability Testing : Backtest---')
-        train_out, test_out = self.model.predict()
 
         # If model is regression type, alter prediction to classification
         if self.config.model_type in ['linreg','kernelreg','nnreg','knnreg','ridge','lasso'] :

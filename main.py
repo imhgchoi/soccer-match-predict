@@ -9,6 +9,7 @@ from models.knn_regressor import KNNRegressor
 from models.logreg_classifier import LogisticRegression
 from models.mlp_classifier import MLPClassifier
 from models.ridge import RidgeReg
+from models.kernel_regression import KernelRegression
 import pickle
 
 
@@ -30,6 +31,8 @@ def get_model(config, dataset) :
         model = MLPClassifier(config, dataset)
     elif config.model_type == 'ridge':
         model = RidgeReg(config, dataset)
+    elif config.model_type == 'kernelreg':
+        model = KernelRegression(config, dataset)
 
 
     return model
