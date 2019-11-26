@@ -44,7 +44,7 @@ class KernelRegression(BaseModel):
         self.dataset.testY = testY
 
     def gaussianKernel(self, x_L2, sd):
-        K = np.exp(-0.5 * (x_L2/sd)**2)
+        K = np.exp(- x_L2/(sd**2))
         return K
 
     def train(self):
@@ -55,14 +55,12 @@ class KernelRegression(BaseModel):
     def predict(self):
         train_out = []
         print('predicting train...')
-        for idx_, row in enumerate(self.dataset.trainX) :
-            row1=row
+        for idx_, row1 in enumerate(self.dataset.trainX) :
             y_sum = 0
             w_sum = 0
-            for idx, row in enumerate(self.dataset.trainX) :
+            for idx, row2 in enumerate(self.dataset.trainX) :
                 if idx_ == idx :
                     continue
-                row2 = row
                 kernel_dis= self.gaussianKernel(np.linalg.norm(row1 - row2, axis=0, ord=2), self.sd)
                 y_i= kernel_dis*self.dataset.trainY[idx]
                 y_sum = y_sum + y_i
@@ -72,12 +70,10 @@ class KernelRegression(BaseModel):
 
         test_out = []
         print('predicting test...')
-        for row in self.dataset.testX:
-            row1=row
+        for row1 in self.dataset.testX:
             y_sum = 0
             w_sum = 0
-            for idx, row in enumerate(self.dataset.trainX) :
-                row2 = row
+            for idx, row2 in enumerate(self.dataset.trainX) :
                 kernel_dis= self.gaussianKernel(np.linalg.norm(row1 - row2, axis=0, ord=2), self.sd)
                 y_i= kernel_dis*self.dataset.trainY[idx]
                 y_sum = y_sum + y_i
