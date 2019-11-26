@@ -44,7 +44,7 @@ class KernelRegression(BaseModel):
         self.dataset.testY = testY
 
     def gaussianKernel(self, x_L2, sd):
-        K = np.exp(- x_L2/(sd**2))
+        K = np.exp(-(x_L2/sd)**2)
         return K
 
     def train(self):
