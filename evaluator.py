@@ -42,6 +42,7 @@ class Evaluator():
 
             print('train set : HOME MSE - {}  /  AWAY MSE - {}'.format(train_MSE[0], train_MSE[1]))
             print('test set : HOME MSE - {}  /  AWAY MSE - {}'.format(test_MSE[0], test_MSE[1]))
+            print('test set : AVERAGE MSE - {}'.format((test_MSE[0] + test_MSE[1])/2))
             print('\n')
 
         if 'mae' in self.config.eval_metrics :
@@ -50,6 +51,7 @@ class Evaluator():
 
             print('train set : HOME MAE - {}  /  AWAY MAE - {}'.format(train_MAE[0], train_MAE[1]))
             print('test set : HOME MAE - {}  /  AWAY MAE - {}'.format(test_MAE[0], test_MAE[1]))
+            print('test set : AVERAGE MAE - {}'.format((test_MAE[0] + test_MAE[1])/2))
             print('\n')
 
         # Regression to Classification

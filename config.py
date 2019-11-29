@@ -28,17 +28,17 @@ def get_args():
     argp.add_argument('--ridgereg_w_init', type=str, default='uniform', choices=['uniform','xavier'])
     argp.add_argument('--ridgereg_alpha', type=float, default=0.01)
     argp.add_argument('--ridgereg_tolerance', type=float, default=1e-7)
-    argp.add_argument('--ridgereg_beta', type=float, default=0.5)
+    argp.add_argument('--ridgereg_beta', type=float, default=0.01)
 
     # kernel regression
-    argp.add_argument('--kernelreg_std', type=float, default=0.1)
+    argp.add_argument('--kernelreg_std', type=float, default=0.5)
 
     # svm regression
     argp.add_argument('--svm_w_init', type=str, default='uniform', choices=['uniform', 'xavier'])
-    argp.add_argument('--svm_alpha', type=float, default=0.0001)
-    argp.add_argument('--svm_tolerance', type=float, default=1e-8)
-    argp.add_argument('--svm_delta', type=float, default=2)
-    argp.add_argument('--svm_C', type=float, default=1)
+    argp.add_argument('--svm_alpha', type=float, default=0.005)
+    argp.add_argument('--svm_tolerance', type=float, default=1e-7)
+    argp.add_argument('--svm_delta', type=float, default=1)
+    argp.add_argument('--svm_C', type=float, default=0.01)
 
     # KNN classification & regression
     argp.add_argument('--knn_k', type=int, default=11)
