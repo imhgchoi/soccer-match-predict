@@ -8,7 +8,7 @@ Data Source : [AndrewCarterUK github](http://www.github.com/AndrewCarterUK/footb
 ### Usage
 * To run the code
 ```
-python main.py
+python main.py --model_type [mlpclass] [--other configurations]
 ```
 
 * Help
